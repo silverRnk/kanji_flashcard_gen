@@ -1,3 +1,6 @@
+import 'dart:ffi';
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:sidebarx/sidebarx.dart';
 import 'package:flutter/services.dart';
@@ -105,66 +108,111 @@ class _MyHomePageState extends State<MyHomePage> {
             ],
           ),
           Expanded(
-            child: ListView(
-              // Column is also a layout widget. It takes a list of children and
-              // arranges them vertically. By default, it sizes itself to fit its
-              // children horizontally, and tries to be as tall as its parent.
-              //
-              // Column has various properties to control how it sizes itself and
-              // how it positions its children. Here we use mainAxisAlignment to
-              // center the children vertically; the main axis here is the vertical
-              // axis because Columns are vertical (the cross axis would be
-              // horizontal).
-              //
-              // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-              // action in the IDE, or press "p" in the console), to see the
-              // wireframe for each widget.
-              children: <Widget>[
-                const Text(
-                  'Create a flash card',
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.w900),
-                ),
-                const Text(
-                  'Kanji Character',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-                TextField(
-                  textAlign: TextAlign.center,
-                  onChanged: (value) {
-                    _setKanji(value);
-                  },
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Text(
-                  'Memonics and Picture',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-                TextField(
-                  textAlign: TextAlign.center,
-                  decoration:
-                      InputDecoration(label: Text('Paste your pic here')),
-                ),
-                SizedBox(
-                  height: 5,
-                ),
-                ClipBoardBox(
-                    kanji: _kanji,
-                    side: FlashCardSide.front,
-                    flashCardType: KanjiFlashCardType.memonicAndPic),
-                Text(
-                  'Stroke Pic',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-                TextField(
-                  textAlign: TextAlign.center,
-                ),
-                ClipBoardBox(
-                    kanji: _kanji,
-                    side: FlashCardSide.front,
-                    flashCardType: KanjiFlashCardType.stroke)
-              ],
+            child: Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: ListView(
+                // Column is also a layout widget. It takes a list of children and
+                // arranges them vertically. By default, it sizes itself to fit its
+                // children horizontally, and tries to be as tall as its parent.
+                //
+                // Column has various properties to control how it sizes itself and
+                // how it positions its children. Here we use mainAxisAlignment to
+                // center the children vertically; the main axis here is the vertical
+                // axis because Columns are vertical (the cross axis would be
+                // horizontal).
+                //
+                // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
+                // action in the IDE, or press "p" in the console), to see the
+                // wireframe for each widget.
+                children: <Widget>[
+                  const Text(
+                    'Create a flash card',
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.w900),
+                  ),
+                  const Text(
+                    'Kanji Character',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                  TextField(
+                    textAlign: TextAlign.center,
+                    onChanged: (value) {
+                      _setKanji(value);
+                    },
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    'Memonics and Picture',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                  TextField(
+                    textAlign: TextAlign.center,
+                    decoration:
+                        InputDecoration(label: Text('Paste your pic here')),
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  ClipBoardBox(
+                      data: _kanji,
+                      side: FlashCardSide.front,
+                      flashCardType: KanjiFlashCardType.memonicAndPic),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  ClipBoardBox(
+                      data: _kanji,
+                      side: FlashCardSide.back,
+                      flashCardType: KanjiFlashCardType.memonicAndPic),
+                  Text(
+                    'Stroke Pic',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                  TextField(
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(
+                    height: 5.0,
+                  ),
+                  ClipBoardBox(
+                      data: _kanji,
+                      side: FlashCardSide.front,
+                      flashCardType: KanjiFlashCardType.stroke),
+                  const SizedBox(
+                    height: 5.0,
+                  ),
+                  ClipBoardBox(
+                      data: '',
+                      side: FlashCardSide.back,
+                      flashCardType: KanjiFlashCardType.stroke),
+                  const SizedBox(
+                    height: 5.0,
+                  ),
+                  const Divider(
+                    color: Colors.black,
+                    height: 2.0,
+                    thickness: 2.0,
+                  ),
+                  const Text(
+                    'Add an On Reading',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                  KanjiReading(
+                      kanji: _kanji, readingType: KanjiReadingType.onReading),
+                  const Divider(
+                    color: Colors.black,
+                    height: 2.0,
+                    thickness: 2.0,
+                  ),
+                  const Text(
+                    'Add an On Reading',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                  KanjiReading(
+                      kanji: _kanji, readingType: KanjiReadingType.kunReading),
+                ],
+              ),
             ),
           ),
         ],
@@ -185,14 +233,15 @@ enum KanjiFlashCardType { stroke, memonicAndPic, onReading, kunReading, vocab }
 class ClipBoardBox extends StatelessWidget {
   ClipBoardBox(
       {super.key,
-      required this.kanji,
+      required this.data,
       required this.side,
       required this.flashCardType});
 
-  final String kanji;
+  final String data;
   final FlashCardSide side;
   final KanjiFlashCardType flashCardType;
 
+  /// return the Label for front of flash card
   String getFrontLabel() {
     var label;
     switch (flashCardType) {
@@ -223,24 +272,30 @@ class ClipBoardBox extends StatelessWidget {
     switch (side) {
       case FlashCardSide.front:
         clipBoardText =
-            '<h1 style="text-align: center;">$kanji</h1><div style="text-align: center;">${getFrontLabel()}</div>';
+            '<h1 style="text-align: center;">$data</h1><div style="text-align: center;">${getFrontLabel()}</div>';
         break;
       case FlashCardSide.back:
-        clipBoardText = '<div style="text-align:center">$kanji</div>';
+        clipBoardText = '<div style="text-align:center">$data</div>';
         break;
       default:
     }
 
     return Container(
       decoration: BoxDecoration(
-          color: Color.fromRGBO(110, 110, 110, 100),
+          color: Color.fromRGBO(110, 110, 0, 100),
           borderRadius: BorderRadius.all(Radius.circular(10.0))),
-      clipBehavior: Clip.hardEdge,
+      clipBehavior: Clip.antiAlias,
       padding: EdgeInsetsDirectional.fromSTEB(10, 5, 5, 10),
-      width: 10,
-      child: Row(
+      constraints: const BoxConstraints(maxWidth: 400.0, minWidth: 10.0),
+      child: Flex(
+        direction: Axis.horizontal,
         children: [
-          Text(clipBoardText),
+          Expanded(
+              child: Text(
+            clipBoardText,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          )),
           IconButton(
               onPressed: () {
                 Clipboard.setData(new ClipboardData(text: clipBoardText));
@@ -254,34 +309,166 @@ class ClipBoardBox extends StatelessWidget {
 
 enum KanjiReadingType { onReading, kunReading }
 
-class KanjiReading extends StatelessWidget {
+class KanjiReading extends StatefulWidget {
   KanjiReading({required this.kanji, required this.readingType});
 
   final String kanji;
   final KanjiReadingType readingType;
 
   @override
-  Widget build(BuildContext context) {
-    var label;
+  State<KanjiReading> createState() => _KanjiReadingState();
+}
 
-    switch (readingType) {
+class _KanjiReadingState extends State<KanjiReading> {
+  String _reading = '';
+  String _meaning = '';
+
+  void setReading(String input) {
+    setState(() {
+      _reading = input;
+    });
+  }
+
+  void setMeaning(String input) {
+    setState(() {
+      _meaning = input;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    String label;
+    KanjiFlashCardType type;
+
+    switch (widget.readingType) {
       case KanjiReadingType.onReading:
         label = 'On Reading';
+        type = KanjiFlashCardType.onReading;
         break;
-      case KanjiReadingType.onReading:
+      case KanjiReadingType.kunReading:
         label = 'Kun Reading';
+        type = KanjiFlashCardType.kunReading;
+        break;
+      default:
+        label = '';
+        type = KanjiFlashCardType.vocab;
+    }
+
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20.0, 0, 0, 0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            height: 5,
+          ),
+          Text(
+            label,
+            textAlign: TextAlign.start,
+          ),
+          TextField(onChanged: (value) {
+            setReading(value);
+            print(_reading);
+          },),
+          Text('Meaning'),
+          TextField(onChanged: (value) {
+            setMeaning(value);
+          },),
+          SizedBox(
+            height: 5,
+          ),
+          ReadingClipBoardBox(
+              kanji: widget.kanji,
+              reading: _reading,
+              meaning: _meaning,
+              side: FlashCardSide.front,
+              flashCardType: type),
+          SizedBox(
+            height: 5,
+          ),
+          ReadingClipBoardBox(
+              kanji: widget.kanji,
+              reading: _reading,
+              meaning: _meaning,
+              side: FlashCardSide.back,
+              flashCardType: type),
+        ],
+      ),
+    );
+  }
+}
+
+class ReadingClipBoardBox extends StatelessWidget {
+  ReadingClipBoardBox(
+      {super.key,
+      required this.kanji,
+      required this.reading,
+      required this.meaning,
+      required this.side,
+      required this.flashCardType});
+
+  final String kanji;
+  final String reading;
+  final String meaning;
+  final FlashCardSide side;
+  final KanjiFlashCardType flashCardType;
+
+  /// return the Label for front of flash card
+  String getFrontLabel() {
+    String label;
+
+    switch (flashCardType) {
+      case KanjiFlashCardType.onReading:
+        label = 'On Reading';
+        break;
+      case KanjiFlashCardType.kunReading:
+        label = 'Kun Reading';
+        break;
+      default:
+        label = '';
+    }
+    return label;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    dynamic clipBoardText;
+
+    switch (side) {
+      case FlashCardSide.front:
+        clipBoardText =
+            '<h1 style="text-align: center;">$kanji</h1><div style="text-align: center;">${getFrontLabel()}</div>';
+        break;
+      case FlashCardSide.back:
+        clipBoardText =
+            '<div style="text-align:center"><b>$reading</b> ($meaning)</div>';
         break;
       default:
     }
 
-    return Column(
-      children: [
-        Text(label),
-        Text('Reading'),
-        TextField(),
-        Text('Meaning'),
-        TextField()
-      ],
+    return Container(
+      decoration: BoxDecoration(
+          color: Color.fromRGBO(110, 110, 0, 100),
+          borderRadius: BorderRadius.all(Radius.circular(10.0))),
+      clipBehavior: Clip.antiAlias,
+      padding: EdgeInsetsDirectional.fromSTEB(10, 5, 5, 10),
+      constraints: const BoxConstraints(maxWidth: 400.0, minWidth: 10.0),
+      child: Flex(
+        direction: Axis.horizontal,
+        children: [
+          Expanded(
+              child: Text(
+            clipBoardText,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          )),
+          IconButton(
+              onPressed: () {
+                Clipboard.setData(new ClipboardData(text: clipBoardText));
+              },
+              icon: Icon(Icons.copy))
+        ],
+      ),
     );
   }
 }

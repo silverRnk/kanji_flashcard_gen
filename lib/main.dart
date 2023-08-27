@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kanji_flashcard_gen/page1.dart';
+import 'package:kanji_flashcard_gen/page2.dart';
 
 void main() {
   runApp(const MyApp());
@@ -56,7 +57,7 @@ class _MyHomePageState extends State<MyHomePage> {
       case 0:
         page = CreateKanjiPage();
       case 1:
-        page = Placeholder();
+        page = AddVocabPage();
       default:
         page = Placeholder();
     }

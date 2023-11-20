@@ -5,10 +5,12 @@ import 'clipboardbox.dart';
 enum KanjiReadingType { onReading, kunReading }
 
 class KanjiReading extends StatefulWidget {
-  KanjiReading({required this.kanji, required this.readingType});
+  KanjiReading({required this.kanji, required this.readingType, this.onMeaningInput, this.onReadingInput});
 
   final String kanji;
   final KanjiReadingType readingType;
+  void Function(String)? onReadingInput;
+  void Function(String)? onMeaningInput; 
 
   @override
   State<KanjiReading> createState() => _KanjiReadingState();
@@ -64,33 +66,50 @@ class _KanjiReadingState extends State<KanjiReading> {
           TextField(
             onChanged: (value) {
               setReading(value);
-              print(_reading);
+              widget.onReadingInput!(_reading);
             },
           ),
           Text('Meaning'),
           TextField(
             onChanged: (value) {
               setMeaning(value);
+              widget.onMeaningInput!(_meaning);
             },
           ),
           SizedBox(
-            height: 5,
+            height: 10,
           ),
-          ReadingClipBoardBox(
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+            Column(
+              children: [
+                Text('Front'),
+              ReadingClipBoardBox(
               kanji: widget.kanji,
               reading: _reading,
               meaning: _meaning,
               side: FlashCardSide.front,
               flashCardType: type),
-          SizedBox(
-            height: 5,
-          ),
-          ReadingClipBoardBox(
+              ],
+            ),
+            Column(
+              children: [
+                Text('Back'),
+              ReadingClipBoardBox(
               kanji: widget.kanji,
               reading: _reading,
               meaning: _meaning,
               side: FlashCardSide.back,
               flashCardType: type),
+              ],
+            )
+          ],),
+          
+          SizedBox(
+            height: 5,
+          ),
+          
         ],
       ),
     );

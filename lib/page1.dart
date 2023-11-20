@@ -1,4 +1,3 @@
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:kanji_flashcard_gen/widget/clipboardbox.dart';
@@ -14,6 +13,7 @@ class CreateKanjiPage extends StatefulWidget {
 
 class _CreateKanjiPage extends State<CreateKanjiPage> {
   String _kanji = '';
+  List<OnReadingItem> onReadingItems = [];
   double _scrollHeight = 0.0;
   late ScrollController scrollController;
 
@@ -29,14 +29,24 @@ class _CreateKanjiPage extends State<CreateKanjiPage> {
     });
   }
 
-  @override
-  void initState() {
-    scrollController = ScrollController(initialScrollOffset: 0.0, keepScrollOffset: true);
-    super.initState();
+  void _addOnReading(OnReadingItem onReading){
+    setState(() {
+      onReadingItems.add(onReading);
+    });
   }
 
   @override
+  void initState() {
+    scrollController = ScrollController(initialScrollOffset: 0.0, keepScrollOffset: true);
+    print("Init page1");
+    super.initState();
+  }
+
+
+  @override
   Widget build(BuildContext context){
+
+    // final item = Navigator.push(context, MaterialPageRoute(builder: (context) => Placeholder())) as OnReadingItem;
 
     return Listener(
       onPointerSignal: (event) {
@@ -124,7 +134,7 @@ class _CreateKanjiPage extends State<CreateKanjiPage> {
                           height: 2.0,
                           thickness: 2.0,
                         ),
-                        OnReadingSection(items: []),
+                        OnReadingSection(items: onReadingItems, kanji: _kanji, setOnReading: _addOnReading,),
                         const Divider(
                           color: Colors.black,
                           height: 2.0,

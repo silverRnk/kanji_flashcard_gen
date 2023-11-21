@@ -5,9 +5,12 @@ import 'clipboardbox.dart';
 enum KanjiReadingType { onReading, kunReading }
 
 class KanjiReading extends StatefulWidget {
-  KanjiReading({required this.kanji, required this.readingType, this.onMeaningInput, this.onReadingInput});
+  KanjiReading({required this.kanji, required this.readingType,this.frontTF, this.backTF,
+   this.onMeaningInput, this.onReadingInput});
 
   final String kanji;
+  final String? frontTF;
+  final String? backTF;
   final KanjiReadingType readingType;
   void Function(String)? onReadingInput;
   void Function(String)? onMeaningInput; 
@@ -30,6 +33,18 @@ class _KanjiReadingState extends State<KanjiReading> {
     setState(() {
       _meaning = input;
     });
+  }
+
+  @override
+  void initState() {
+    if(widget.frontTF != null){
+      setReading(widget.frontTF!);
+    }
+
+    if(widget.backTF != null){
+      setMeaning(widget.backTF!);
+    }
+    super.initState();
   }
 
   @override
@@ -64,6 +79,7 @@ class _KanjiReadingState extends State<KanjiReading> {
             textAlign: TextAlign.start,
           ),
           TextField(
+            controller: TextEditingController.fromValue(TextEditingValue(text: _reading)),
             onChanged: (value) {
               setReading(value);
               widget.onReadingInput!(_reading);
@@ -71,6 +87,7 @@ class _KanjiReadingState extends State<KanjiReading> {
           ),
           Text('Meaning'),
           TextField(
+            controller: TextEditingController.fromValue(TextEditingValue(text: _meaning)),
             onChanged: (value) {
               setMeaning(value);
               widget.onMeaningInput!(_meaning);

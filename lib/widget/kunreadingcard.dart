@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:kanji_flashcard_gen/widget/onreading.dart';
+import 'package:kanji_flashcard_gen/widget/kunreading.dart';
 
-class ReadingCards extends StatelessWidget {
-  const ReadingCards({super.key, required this.title, required this.readingItem, this.onTapDown});
+class KunReadingCard extends StatelessWidget {
+  const KunReadingCard({super.key, required this.title, required this.readingItem, this.onTapDown});
 
   final String title;
-  final OnReadingItem readingItem;
-  final Function(OnReadingItem item)? onTapDown;
+  final KunReadingItem readingItem;
+  final Function(KunReadingItem item)? onTapDown;
 
   void onCopyHandler(String copyString){
     Clipboard.setData(ClipboardData(text: copyString));

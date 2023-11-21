@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:kanji_flashcard_gen/widget/clipboardbox.dart';
 import 'package:kanji_flashcard_gen/widget/kanji_reading.dart';
+import 'package:kanji_flashcard_gen/widget/kunreading.dart';
 import 'package:kanji_flashcard_gen/widget/onreading.dart';
 
 class CreateKanjiPage extends StatefulWidget {
@@ -14,6 +15,7 @@ class CreateKanjiPage extends StatefulWidget {
 class _CreateKanjiPage extends State<CreateKanjiPage> {
   String _kanji = '';
   List<OnReadingItem> onReadingItems = [];
+  List<KunReadingItem> kunReadingItems = [];
   double _scrollHeight = 0.0;
   late ScrollController scrollController;
 
@@ -29,16 +31,30 @@ class _CreateKanjiPage extends State<CreateKanjiPage> {
     });
   }
 
-  void _addOnReading(OnReadingItem onReading){
+  void _addOnReading(OnReadingItem onReading, {int? id}){
     setState(() {
-      onReadingItems.add(onReading);
+      if(onReading.id != null){
+        onReadingItems.replaceRange(onReading.id!, onReading.id!, [onReading]);
+      }else{
+        onReadingItems.add(onReading.copyWith(id: onReadingItems.length));
+      }
+    });
+  }
+
+  void _addKunReading(KunReadingItem kunReading, {int? id}){
+    setState(() {
+      if(kunReading.id != null){
+        kunReadingItems.replaceRange(kunReading.id!, kunReading.id! + 1, [kunReading]);
+      }else{
+        kunReadingItems.add(kunReading.copyWith(id: kunReadingItems.length));
+      }
     });
   }
 
   @override
   void initState() {
     scrollController = ScrollController(initialScrollOffset: 0.0, keepScrollOffset: true);
-    print("Init page1");
+    // print("Init page1");
     super.initState();
   }
 
@@ -57,11 +73,17 @@ class _CreateKanjiPage extends State<CreateKanjiPage> {
         if(event is PointerScrollEvent){
           _setHeight(event.scrollDelta.dy);
           scrollController.animateTo(_scrollHeight, duration: Durations.short4, curve: Curves.linear);
-          print(_scrollHeight);
+          // print(_scrollHeight);
         }
       },
       child: MaterialApp(
         home: Scaffold(
+          floatingActionButton: FloatingActionButton(onPressed: () {
+            setState(() {
+              _scrollHeight = 0;
+            });
+            scrollController.animateTo(_scrollHeight, duration: Durations.short4, curve: Curves.linear);
+          }, child: Icon(Icons.arrow_upward),),
           body: ListView(
                       controller: scrollController,
                       children: <Widget>[
@@ -140,12 +162,7 @@ class _CreateKanjiPage extends State<CreateKanjiPage> {
                           height: 2.0,
                           thickness: 2.0,
                         ),
-                        const Text(
-                          'Add an On Reading',
-                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                        ),
-                        KanjiReading(
-                            kanji: _kanji, readingType: KanjiReadingType.kunReading),
+                        KunReadingSection(items: kunReadingItems, kanji: _kanji, setKunReading: _addKunReading,)
                       ],
                     ),
         ),

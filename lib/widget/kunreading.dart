@@ -1,44 +1,35 @@
 import 'package:flutter/material.dart';
-import 'package:kanji_flashcard_gen/page_add_on_reading.dart';
+import 'package:kanji_flashcard_gen/pageAddKunReading.dart';
+import 'package:kanji_flashcard_gen/widget/kunreadingcard.dart';
+import 'package:kanji_flashcard_gen/widget/onreading.dart';
 import 'package:kanji_flashcard_gen/widget/onreadingcard.dart';
 
-abstract class ReadingItem{
-  int? id;
-  String reading;
-  String meaning;
-
-  ReadingItem({required this.reading, required this.meaning, this.id});
-
-  String cardFront();
-  String cardBack();
-}
-
-class OnReadingItem extends ReadingItem {
+class KunReadingItem extends ReadingItem {
 
   String kanji;
 
-  OnReadingItem({
+  KunReadingItem({
     required this.kanji,
     required String reading,
     required String meaning ,
     int? id}) : super(meaning: meaning, reading: reading, id: id);
 
-  OnReadingItem copyWith({String? reading, String? meaning, String? kanji, int? id}){
+  KunReadingItem copyWith({String? reading, String? meaning, String? kanji, int? id}){
 
     if(reading != null){
-      reading = reading;
+      this.reading = reading;
     }
 
     if(meaning != null){
-      meaning = meaning;
+      this.meaning = meaning;
     }
 
     if(kanji != null){
-      meaning = meaning;
+      this.kanji = kanji;
     }
 
     if(id != null){
-      meaning = meaning;
+      this.id = id;
     }
 
     return this;
@@ -55,20 +46,20 @@ class OnReadingItem extends ReadingItem {
   }
 }
 
-class OnReadingSection extends StatelessWidget {
-  final List<OnReadingItem> items;
+class KunReadingSection extends StatelessWidget {
+  final List<KunReadingItem> items;
   final String kanji;
-  void Function(OnReadingItem)? setOnReading;
+  void Function(KunReadingItem)? setKunReading;
 
-  OnReadingSection({super.key, required this.items, required this.kanji, this.setOnReading});
+  KunReadingSection({super.key, required this.items, required this.kanji, this.setKunReading});
 
-  Future<void> _navigateToAddOnReading(BuildContext context, Function(OnReadingItem) addItem) async {
+  Future<void> _navigateToAddOnReading(BuildContext context, Function(KunReadingItem) addItem) async {
     final item = await Navigator.push(
-      context, MaterialPageRoute(builder: (context) => AddOnReadingPage(kanji: kanji,)));
+      context, MaterialPageRoute(builder: (context) => AddKunReadingPage(kanji: kanji,)));
 
     print(item);
 
-    if(item is OnReadingItem){
+    if(item is KunReadingItem){
       addItem(item);
     }
 
@@ -91,11 +82,11 @@ class OnReadingSection extends StatelessWidget {
         Row(
           children: [
             Expanded(child: Text(
-              'Add an On Reading',
+              'Add an Kun Reading',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),),
             IconButton(onPressed: () {
-              _navigateToAddOnReading(context, (item) => setOnReading!(item));
+              _navigateToAddOnReading(context, (item) => setKunReading!(item));
             }, icon: Icon(Icons.add))
           ],
         ),
@@ -108,18 +99,22 @@ class OnReadingSection extends StatelessWidget {
             runSpacing: 10.0,
             children: List<Widget>.generate(items.length, (index) 
             {
-              return ReadingCards(
-                title: 'On Reading $index',
+              // return Placeholder(fallbackHeight: 75, fallbackWidth: 200,);
+
+              return KunReadingCard(
+                title: 'Kun Reading $index',
                 readingItem: items[index],
                 onTapDown: (item) async {
-                  
+                  print(item.id);
                   final itemHolder = await Navigator.push(
                     context, MaterialPageRoute(builder: (context) => 
-                    AddOnReadingPage(kanji: item.kanji, onReading: item, id: item.id,)));
-                  if(itemHolder is OnReadingItem){
-                    setOnReading!(itemHolder);
+                    AddKunReadingPage(kanji: item.kanji, kunReading: item, id: item.id,)));
+                  if(itemHolder is KunReadingItem){
+                    setKunReading!(itemHolder);
                   }
-                },);}),
+                },
+                );
+                }),
           ),
         )),
         SizedBox(height: 100,)

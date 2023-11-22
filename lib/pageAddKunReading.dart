@@ -22,7 +22,7 @@ class AddKunReadingPage extends StatelessWidget {
         title: Text('add a kun reading'),),
         body: Column(children: [
           KanjiReading(
-            kanji: kanji, readingType: KanjiReadingType.onReading,
+            kanji: kanji, readingType: KanjiReadingType.kunReading,
             frontTF: reading,
             backTF: meaning,
             onMeaningInput: (input) {
@@ -38,7 +38,7 @@ class AddKunReadingPage extends StatelessWidget {
               TextButton(onPressed: () {
                 Navigator.pop(context, 
                  KunReadingItem(reading: reading, kanji: kanji, meaning: meaning, id: id));
-              }, child: Text('Add')),
+              }, child: Text(kunReading != null? 'Edit':'Add')),
               TextButton(onPressed: () {
                 Navigator.pop(context);
               }, child: Text('Cancel'))

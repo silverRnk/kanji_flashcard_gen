@@ -22,6 +22,8 @@ class KanjiReading extends StatefulWidget {
 class _KanjiReadingState extends State<KanjiReading> {
   String _reading = '';
   String _meaning = '';
+  late TextEditingController controllerReadingTF;
+  late TextEditingController controllerMeaningTF;
 
   void setReading(String input) {
     setState(() {
@@ -37,6 +39,8 @@ class _KanjiReadingState extends State<KanjiReading> {
 
   @override
   void initState() {
+    
+
     if(widget.frontTF != null){
       setReading(widget.frontTF!);
     }
@@ -44,6 +48,9 @@ class _KanjiReadingState extends State<KanjiReading> {
     if(widget.backTF != null){
       setMeaning(widget.backTF!);
     }
+    controllerReadingTF = TextEditingController.fromValue(TextEditingValue(text: widget.frontTF ?? ""));
+    controllerMeaningTF = TextEditingController.fromValue(TextEditingValue(text: widget.backTF ?? ""));
+
     super.initState();
   }
 
@@ -79,7 +86,7 @@ class _KanjiReadingState extends State<KanjiReading> {
             textAlign: TextAlign.start,
           ),
           TextField(
-            controller: TextEditingController.fromValue(TextEditingValue(text: _reading)),
+            controller: controllerReadingTF,
             onChanged: (value) {
               setReading(value);
               widget.onReadingInput!(_reading);
@@ -87,7 +94,7 @@ class _KanjiReadingState extends State<KanjiReading> {
           ),
           Text('Meaning'),
           TextField(
-            controller: TextEditingController.fromValue(TextEditingValue(text: _meaning)),
+            controller: controllerMeaningTF,
             onChanged: (value) {
               setMeaning(value);
               widget.onMeaningInput!(_meaning);

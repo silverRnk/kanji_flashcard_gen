@@ -38,7 +38,7 @@ class AddOnReadingPage extends StatelessWidget {
               TextButton(onPressed: () {
                 Navigator.pop(context, 
                  OnReadingItem(reading: reading, kanji: kanji, meaning: meaning, id: id));
-              }, child: Text('Add')),
+              }, child: Text(onReading != null? 'Edit':'Add')),
               TextButton(onPressed: () {
                 Navigator.pop(context);
               }, child: Text('Cancel'))

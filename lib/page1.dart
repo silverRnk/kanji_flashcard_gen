@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+// import 'package:flutter_quill/flutter_quill.dart';
 import 'package:kanji_flashcard_gen/widget/clipboardbox.dart';
 import 'package:kanji_flashcard_gen/widget/kanji_reading.dart';
 import 'package:kanji_flashcard_gen/widget/kunreading.dart';
@@ -18,6 +19,7 @@ class _CreateKanjiPage extends State<CreateKanjiPage> {
   List<KunReadingItem> kunReadingItems = [];
   double _scrollHeight = 0.0;
   late ScrollController scrollController;
+  // late QuillController  quillController;
 
   void _setKanji(String string) {
     setState(() {
@@ -54,6 +56,7 @@ class _CreateKanjiPage extends State<CreateKanjiPage> {
   @override
   void initState() {
     scrollController = ScrollController(initialScrollOffset: 0.0, keepScrollOffset: true);
+    // quillController = QuillController.basic();
     // print("Init page1");
     super.initState();
   }
@@ -108,11 +111,19 @@ class _CreateKanjiPage extends State<CreateKanjiPage> {
                           'Memonics and Picture',
                           style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                         ),
-                        TextField(
-                          textAlign: TextAlign.center,
-                          decoration:
-                              InputDecoration(label: Text('Paste your pic here')),
-                        ),
+                        // QuillProvider(
+                        //   configurations: QuillConfigurations(
+                        //     controller: quillController, 
+                        //     sharedConfigurations: const QuillSharedConfigurations(locale: Locale("en"))), 
+                        //   child: Column(
+                        //     children: [
+                        //       const QuillToolbar()
+                        //       ,QuillEditor.basic(
+                        //       configurations: const QuillEditorConfigurations(
+                        //         readOnly: false
+                        //       ),
+                        //     ),]
+                        //   ) ),
                         SizedBox(
                           height: 5,
                         ),

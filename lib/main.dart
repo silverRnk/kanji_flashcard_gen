@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kanji_flashcard_gen/page1.dart';
 import 'package:kanji_flashcard_gen/page2.dart';
+import 'package:kanji_flashcard_gen/test_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -58,6 +59,8 @@ class _MyHomePageState extends State<MyHomePage> {
         page = CreateKanjiPage();
       case 1:
         page = AddVocabPage();
+      case 2:
+        page = QuillTestPage();
       default:
         page = Placeholder();
     }
@@ -81,7 +84,9 @@ class _MyHomePageState extends State<MyHomePage> {
               NavigationRailDestination(
                   icon: Icon(Icons.home), label: Text('Create Kanji Card')),
               NavigationRailDestination(
-                  icon: Icon(Icons.abc), label: Text('Create Vocab Card'))
+                  icon: Icon(Icons.abc), label: Text('Create Vocab Card')),
+              NavigationRailDestination(
+                  icon: Icon(Icons.abc), label: Text('Quill')),
             ])),
         Expanded(
             child: Padding(padding: const EdgeInsets.all(15.0), child: page)),

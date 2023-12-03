@@ -39,6 +39,8 @@ dependencies:
   flutter_quill: ^8.5.0
   quill_html_converter: ^0.0.1-experimental.1
   extended_text_field: ^12.0.0
+  super_clipboard: ^0.7.3
+  dotted_border: ^2.1.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

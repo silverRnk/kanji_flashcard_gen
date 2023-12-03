@@ -1,10 +1,13 @@
+// import 'dart:html';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-// import 'package:flutter_quill/flutter_quill.dart';
 import 'package:kanji_flashcard_gen/widget/clipboardbox.dart';
-import 'package:kanji_flashcard_gen/widget/kanji_reading.dart';
+import 'package:kanji_flashcard_gen/widget/image_clipboard.dart';
 import 'package:kanji_flashcard_gen/widget/kunreading.dart';
 import 'package:kanji_flashcard_gen/widget/onreading.dart';
+// import 'package:path_provider/path_provider.dart';
+import 'package:super_clipboard/super_clipboard.dart';
 
 class CreateKanjiPage extends StatefulWidget {
   CreateKanjiPage({super.key});
@@ -18,6 +21,7 @@ class _CreateKanjiPage extends State<CreateKanjiPage> {
   List<OnReadingItem> onReadingItems = [];
   List<KunReadingItem> kunReadingItems = [];
   double _scrollHeight = 0.0;
+  String sampleImage = "";
   late ScrollController scrollController;
   // late QuillController  quillController;
 
@@ -26,6 +30,32 @@ class _CreateKanjiPage extends State<CreateKanjiPage> {
       _kanji = string;
     });
   }
+
+  void getImage() async{
+
+    // var fileReader = File('images/Capture.JPG');
+    // var stringHolder = await fileReader.readAsBytes();
+    // setState(() {
+    //   sampleImage = stringHolder[3].toString();
+    // });
+    
+  }
+
+  // void showClipBoardData() async {
+  //   var reader = await ClipboardReader.readClipboard();
+
+  //   if(reader.canProvide(Formats.plainText)){
+  //     var text = "";
+  //     var progress = await reader.getValue(Formats.plainText, (value) {
+  //       text = value ?? "";
+  //     });
+  //     print("copied file $text");
+  //   }else if(reader.canProvide(Formats.png)){
+  //     print('You\'ve copied an png file');
+  //   }else if(reader.canProvide(Formats.jpeg)){
+  //     print('You\'ve copied an jpg file');
+  //   }
+  // }
 
   void _setHeight(double offset) {
     setState(() {
@@ -56,9 +86,18 @@ class _CreateKanjiPage extends State<CreateKanjiPage> {
   @override
   void initState() {
     scrollController = ScrollController(initialScrollOffset: 0.0, keepScrollOffset: true);
+    getImage();
     // quillController = QuillController.basic();
     // print("Init page1");
     super.initState();
+  }
+
+  Widget _divider(BuildContext context){
+    return const Divider(
+                          color: Colors.black,
+                          height: 2.0,
+                          thickness: 2.0,
+                        );
   }
 
 
@@ -107,47 +146,40 @@ class _CreateKanjiPage extends State<CreateKanjiPage> {
                         const SizedBox(
                           height: 10,
                         ),
-                        Text(
+                        _divider(context),
+                        const Text(
                           'Memonics and Picture',
                           style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                         ),
-                        // QuillProvider(
-                        //   configurations: QuillConfigurations(
-                        //     controller: quillController, 
-                        //     sharedConfigurations: const QuillSharedConfigurations(locale: Locale("en"))), 
-                        //   child: Column(
-                        //     children: [
-                        //       const QuillToolbar()
-                        //       ,QuillEditor.basic(
-                        //       configurations: const QuillEditorConfigurations(
-                        //         readOnly: false
-                        //       ),
-                        //     ),]
-                        //   ) ),
+                        ImageClipBoard(new ImageData()),
                         SizedBox(
                           height: 5,
                         ),
-                        ClipBoardBox(
-                            data: _kanji,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                          ClipBoardBox(
+                            data: _kanji + sampleImage,
                             side: FlashCardSide.front,
                             flashCardType: KanjiFlashCardType.memonicAndPic),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        ClipBoardBox(
+                          ClipBoardBox(
                             data: _kanji,
                             side: FlashCardSide.back,
                             flashCardType: KanjiFlashCardType.memonicAndPic),
-                        Text(
+                          ],
+                        ),
+                        SizedBox(height: 10,),
+                        _divider(context),
+                        const Text(
                           'Stroke Pic',
                           style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                        ),
-                        TextField(
-                          textAlign: TextAlign.center,
                         ),
                         SizedBox(
                           height: 5.0,
                         ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
                         ClipBoardBox(
                             data: _kanji,
                             side: FlashCardSide.front,
@@ -159,14 +191,13 @@ class _CreateKanjiPage extends State<CreateKanjiPage> {
                             data: '',
                             side: FlashCardSide.back,
                             flashCardType: KanjiFlashCardType.stroke),
+                          ],
+                        ),
+                        
                         const SizedBox(
                           height: 5.0,
                         ),
-                        const Divider(
-                          color: Colors.black,
-                          height: 2.0,
-                          thickness: 2.0,
-                        ),
+                        _divider(context),
                         OnReadingSection(items: onReadingItems, kanji: _kanji, setOnReading: _addOnReading,),
                         const Divider(
                           color: Colors.black,

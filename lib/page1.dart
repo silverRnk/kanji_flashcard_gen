@@ -22,8 +22,13 @@ class _CreateKanjiPage extends State<CreateKanjiPage> {
   List<KunReadingItem> kunReadingItems = [];
   double _scrollHeight = 0.0;
   String sampleImage = "";
+  ImageData _memonicAndPicImg = ImageData();
+  ImageData _strokeImg = ImageData();
   late ScrollController scrollController;
   // late QuillController  quillController;
+
+  final GlobalKey _memonicsAndPicKey = GlobalKey();
+  final GlobalKey _storeKey = GlobalKey();
 
   void _setKanji(String string) {
     setState(() {
@@ -100,6 +105,40 @@ class _CreateKanjiPage extends State<CreateKanjiPage> {
                         );
   }
 
+  
+  bool isTappedOnMemonicsClipBoard(PointerEvent event) {
+    RenderBox renderBox = _memonicsAndPicKey.currentContext!.findRenderObject() as RenderBox;
+    var widgetPosition = renderBox.localToGlobal(Offset.zero);
+    var widgetSize = renderBox.size;
+
+    return event.position.dx >= widgetPosition.dx &&
+        event.position.dx < widgetPosition.dx + widgetSize.width &&
+        event.position.dy >= widgetPosition.dy &&
+        event.position.dy < widgetPosition.dy + widgetSize.height;
+  }
+
+  bool isTappedOnStrokeClipBoard(PointerEvent event){
+    RenderBox renderBox = _storeKey.currentContext!.findRenderObject() as RenderBox;
+    var widgetPosition = renderBox.localToGlobal(Offset.zero);
+    var widgetSize = renderBox.size;
+
+    return event.position.dx >= widgetPosition.dx &&
+        event.position.dx < widgetPosition.dx + widgetSize.width &&
+        event.position.dy >= widgetPosition.dy &&
+        event.position.dy < widgetPosition.dy + widgetSize.height;
+  }
+
+  //To make the view scrollable by mouse
+  void _handleMouseScroll(PointerSignalEvent? event){
+    if(_scrollHeight > scrollController.position.maxScrollExtent){
+        return;
+    }
+
+    if(event is PointerScrollEvent){
+        _setHeight(event.scrollDelta.dy);
+        scrollController.animateTo(_scrollHeight, duration: Durations.short4, curve: Curves.linear);
+    }
+  }
 
   @override
   Widget build(BuildContext context){
@@ -107,16 +146,13 @@ class _CreateKanjiPage extends State<CreateKanjiPage> {
     // final item = Navigator.push(context, MaterialPageRoute(builder: (context) => Placeholder())) as OnReadingItem;
 
     return Listener(
+      onPointerDown: (event) {
+        if(!isTappedOnMemonicsClipBoard(event) && !isTappedOnStrokeClipBoard(event)){
+          FocusScope.of(context).requestFocus(FocusNode());
+        }
+      },
       onPointerSignal: (event) {
-        if(_scrollHeight > scrollController.position.maxScrollExtent){
-          return;
-        }
-
-        if(event is PointerScrollEvent){
-          _setHeight(event.scrollDelta.dy);
-          scrollController.animateTo(_scrollHeight, duration: Durations.short4, curve: Curves.linear);
-          // print(_scrollHeight);
-        }
+        _handleMouseScroll(event);
       },
       child: MaterialApp(
         home: Scaffold(
@@ -151,7 +187,12 @@ class _CreateKanjiPage extends State<CreateKanjiPage> {
                           'Memonics and Picture',
                           style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                         ),
-                        ImageClipBoard(new ImageData()),
+                        // Memonics and Pic Clipboard
+                        ImageClipBoard(_memonicAndPicImg, key: _memonicsAndPicKey, onPaste: (path) {
+                          setState(() {
+                            _memonicAndPicImg.setImgPath = path;
+                          });
+                        }),
                         SizedBox(
                           height: 5,
                         ),
@@ -176,6 +217,11 @@ class _CreateKanjiPage extends State<CreateKanjiPage> {
                         ),
                         SizedBox(
                           height: 5.0,
+                        ),
+                        //Stroke Clipboard
+                        ImageClipBoard(_strokeImg, key: _storeKey, onPaste: (path) {
+                          setState(() {
+                            _strokeImg.setImgPath = path;});}
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,

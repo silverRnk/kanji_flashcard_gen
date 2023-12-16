@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kanji_flashcard_gen/page1.dart';
 import 'package:kanji_flashcard_gen/page2.dart';
+import 'package:kanji_flashcard_gen/pages/kanji_card/home.dart';
 import 'package:kanji_flashcard_gen/test_page.dart';
 
 void main() {
@@ -56,7 +57,7 @@ class _MyHomePageState extends State<MyHomePage> {
     Widget page;
     switch (_selectedIndex) {
       case 0:
-        page = CreateKanjiPage();
+        page = HomePage();
       case 1:
         page = AddVocabPage();
       case 2:

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kanji_flashcard_gen/widget/kanji_chips.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -13,7 +14,8 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       body: Wrap(
         children: [
-          
+          KanjiChip(),
+          KanjiChip()
         ],
       ),
     );

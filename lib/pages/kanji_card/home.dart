@@ -10,17 +10,15 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
           actions: [
-            IconButton(onPressed: () {
-              Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-                return AddCardPage();
-              },))
-            }, icon: Icon(Icons.add), tooltip: 'Create a new card',)
+            ActionButton1()
           ],
         ),
         body: Stack(
@@ -35,5 +33,18 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
     );
+  }
+}
+
+class ActionButton1 extends StatelessWidget {
+  const ActionButton1({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(onPressed: () {
+              Navigator.push(context,MaterialPageRoute(builder: (context) {
+                return AddCardPage();
+              },));
+            }, icon: Icon(Icons.add), tooltip: 'Create a new card',);
   }
 }

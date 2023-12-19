@@ -57,9 +57,9 @@ class _MyHomePageState extends State<MyHomePage> {
     Widget page;
     switch (_selectedIndex) {
       case 0:
-        page = HomePage();
+        page = CreateKanjiPage();
       case 1:
-        page = AddVocabPage();
+        page = HomePage();
       case 2:
         page = QuillTestPage();
       default:

@@ -10,6 +10,14 @@ class AddCardPage extends StatefulWidget {
 class _AddCardPageState extends State<AddCardPage> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Container(
+      child: Scaffold(
+        appBar: AppBar(
+          leading: IconButton(onPressed: () {
+            Navigator.of(context).pop();
+          }, icon: Icon(Icons.arrow_back)),
+        ),
+      ),
+    );
   }
 }

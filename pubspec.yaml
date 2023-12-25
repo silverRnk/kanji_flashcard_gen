@@ -41,6 +41,7 @@ dependencies:
   extended_text_field: ^12.0.0
   super_clipboard: ^0.7.3
   dotted_border: ^2.1.0
+  provider: ^6.1.1
 dev_dependencies:
   flutter_test:
     sdk: flutter

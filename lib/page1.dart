@@ -95,6 +95,7 @@ class _CreateKanjiPage extends State<CreateKanjiPage> {
     // quillController = QuillController.basic();
     // print("Init page1");
     super.initState();
+    debugPrint(_memonicsAndPicKey.currentContext?.toString());
   }
 
   Widget _divider(BuildContext context){
@@ -107,6 +108,10 @@ class _CreateKanjiPage extends State<CreateKanjiPage> {
 
   
   bool isTappedOnMemonicsClipBoard(PointerEvent event) {
+    if(_memonicsAndPicKey.currentContext == null){
+      return false;
+    }
+
     RenderBox renderBox = _memonicsAndPicKey.currentContext!.findRenderObject() as RenderBox;
     var widgetPosition = renderBox.localToGlobal(Offset.zero);
     var widgetSize = renderBox.size;

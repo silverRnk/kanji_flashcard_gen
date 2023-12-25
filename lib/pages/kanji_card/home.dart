@@ -16,21 +16,24 @@ class _HomePageState extends State<HomePage> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        appBar: AppBar(
-          actions: [
-            ActionButton1()
-          ],
-        ),
-        body: Stack(
-          children: [Wrap(
+        body: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Wrap(
             spacing: 10,
             children: [
               KanjiChip(),
               KanjiChip(),
               MyInkWellChip()
             ],
-          ),]
+          ),
         ),
+        floatingActionButton: Builder(builder: (context) {
+          return FloatingActionButton(onPressed: () {
+            Navigator.push(context,MaterialPageRoute(builder: (context) {
+                return CreateKanjiPage();
+              },));
+          }, child: const Icon(Icons.add),);
+        }),
       ),
     );
   }
@@ -43,7 +46,7 @@ class ActionButton1 extends StatelessWidget {
   Widget build(BuildContext context) {
     return IconButton(onPressed: () {
               Navigator.push(context,MaterialPageRoute(builder: (context) {
-                return AddCardPage();
+                return CreateKanjiPage();
               },));
             }, icon: Icon(Icons.add), tooltip: 'Create a new card',);
   }

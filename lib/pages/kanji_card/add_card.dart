@@ -2,10 +2,13 @@
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:kanji_flashcard_gen/model/KanjiCard.dart';
+import 'package:kanji_flashcard_gen/state.dart';
 import 'package:kanji_flashcard_gen/widget/clipboardbox.dart';
 import 'package:kanji_flashcard_gen/widget/image_clipboard.dart';
 import 'package:kanji_flashcard_gen/widget/kunreading.dart';
 import 'package:kanji_flashcard_gen/widget/onreading.dart';
+import 'package:provider/provider.dart';
 // import 'package:path_provider/path_provider.dart';
 import 'package:super_clipboard/super_clipboard.dart';
 
@@ -258,7 +261,27 @@ class _CreateKanjiPage extends State<CreateKanjiPage> {
                           height: 2.0,
                           thickness: 2.0,
                         ),
-                        KunReadingSection(items: kunReadingItems, kanji: _kanji, setKunReading: _addKunReading,)
+                        KunReadingSection(items: kunReadingItems, kanji: _kanji, setKunReading: _addKunReading,),
+                        const SizedBox(height: 10,),
+                        Row(
+                          children: [
+                            const Expanded(child: SizedBox(height: 0,)),
+                            FilledButton(onPressed: () {
+                              Provider.of<KanjiCardModel>(context, listen: false).add(KanjiCard(
+                                kanji: _kanji, 
+                                strokeImgPath: _strokeImg.imgPath, 
+                                mnemonicPath: _memonicAndPicImg.imgPath, 
+                                onReadings: onReadingItems, 
+                                kunReadings: kunReadingItems));
+
+                                Navigator.pop(context);
+                            }, child: Text('Add')),
+                            const SizedBox(width: 10,),
+                            FilledButton(onPressed: () {
+                              Navigator.pop(context);
+                            }, child: Text('Cancel'))
+                          ],
+                        )
                       ],
                     ),
         ),

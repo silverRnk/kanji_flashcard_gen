@@ -2,10 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:kanji_flashcard_gen/page1.dart';
 // import 'package:kanji_flashcard_gen/page2.dart';
 import 'package:kanji_flashcard_gen/pages/kanji_card/home.dart';
+import 'package:kanji_flashcard_gen/state.dart';
 import 'package:kanji_flashcard_gen/test_page.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider(create: (context) => KanjiCardModel())
+    ],
+    child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {

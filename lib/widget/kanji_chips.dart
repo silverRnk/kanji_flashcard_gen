@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 
 class KanjiChip extends StatefulWidget{
 
-  KanjiChip({super.key});
+  KanjiChip({super.key, required this.kanji});
+
+  final String kanji;
 
   @override
   State<StatefulWidget> createState() =>  _KanjiChipState();
@@ -41,7 +43,7 @@ class _KanjiChipState extends State<KanjiChip> {
         width: 250,
         padding: const EdgeInsets.fromLTRB(10, 10, 5, 10),
         child: Row(
-          children: [Expanded(child: Text('Kanji')), MenuAnchor(builder: (context, controller, child) {
+          children: [Expanded(child: Text(widget.kanji)), MenuAnchor(builder: (context, controller, child) {
             return IconButton(onPressed: () {
               if(!controller.isOpen){
                 controller.open();

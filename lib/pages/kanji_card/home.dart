@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:kanji_flashcard_gen/pages/kanji_card/add_card.dart';
+import 'package:kanji_flashcard_gen/state.dart';
 import 'package:kanji_flashcard_gen/widget/kanji_chips.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -18,13 +20,14 @@ class _HomePageState extends State<HomePage> {
       home: Scaffold(
         body: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Wrap(
+          child: Consumer<KanjiCardModel>(builder: (context, cards, child) {
+                return Wrap(
             spacing: 10,
             children: [
-              KanjiChip(),
-              KanjiChip(),
-              MyInkWellChip()
-            ],
+              ...cards.items.map((e) => KanjiChip(kanji: e.kanji)).toList() 
+              // List.generate(cards.items.length, (index) => KanjiChip(kanji: cards.items[index].kanji,)) as Widget
+            ],);
+              }
           ),
         ),
         floatingActionButton: Builder(builder: (context) {

@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 
 class KanjiChip extends StatefulWidget{
 
-  KanjiChip({super.key, required this.kanji});
+  KanjiChip({super.key, required this.kanji, this.onClick});
 
   final String kanji;
+  final void Function()? onClick;
 
   @override
   State<StatefulWidget> createState() =>  _KanjiChipState();
@@ -13,7 +14,7 @@ class KanjiChip extends StatefulWidget{
 class _KanjiChipState extends State<KanjiChip> {
   OverlayPortalController _overlayPortalController = new OverlayPortalController();
 
-  Widget _myInkWellContainer({required Widget child, Color? color, void Function()? onTap }){
+  Widget _myInkWellContainer({required Widget child, Color? color,}){
     return Container(
       decoration: BoxDecoration(
           color: color,
@@ -25,7 +26,7 @@ class _KanjiChipState extends State<KanjiChip> {
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          onTap: onTap,
+          onTap: widget.onClick,
           child: child
         )), 
       );
@@ -35,9 +36,6 @@ class _KanjiChipState extends State<KanjiChip> {
   Widget build(BuildContext context) {
     return _myInkWellContainer(
       color: Colors.white,
-      onTap: () {
-        debugPrint('Selected an kanji card');
-      },
       child: Container(
         height: 65,
         width: 250,
@@ -51,8 +49,14 @@ class _KanjiChipState extends State<KanjiChip> {
                 controller.close();
               }
             }, icon: Icon(Icons.more_vert), tooltip: 'Show more',);
-          },menuChildren: List<MenuItemButton>.generate(3, 
-          (index) => MenuItemButton(child: Text('Selection $index'), onPressed: () {},)))],
+          },menuChildren: [
+            MenuItemButton(child: Text('Edit'), onPressed: () {
+              
+            },),
+            MenuItemButton(child: Text('Delete'), onPressed: () {
+              
+            },)
+          ])],
         ),
       ),
     );

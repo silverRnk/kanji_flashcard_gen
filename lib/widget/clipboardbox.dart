@@ -40,20 +40,34 @@ class ClipBoardBox extends StatelessWidget {
     return label;
   }
 
+  String buildNormalCard() {
+    switch (side) {
+      case FlashCardSide.front:
+        return
+            '<h1 style="text-align: center;">$data</h1><div style="text-align: center;">${getFrontLabel()}</div>';
+      case FlashCardSide.back:
+        return '<div style="text-align:center">$data</div>';
+      default:
+        throw 'side does not exist';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     dynamic clipBoardText;
 
-    switch (side) {
-      case FlashCardSide.front:
-        clipBoardText =
-            '<h1 style="text-align: center;">$data</h1><div style="text-align: center;">${getFrontLabel()}</div>';
-        break;
-      case FlashCardSide.back:
-        clipBoardText = '<div style="text-align:center">$data</div>';
-        break;
-      default:
+
+    if(side == FlashCardSide.back && 
+      flashCardType == KanjiFlashCardType.memonicAndPic || 
+      flashCardType == KanjiFlashCardType.stroke){
+
+      clipBoardText = '<div style="text-align:center"><img src="$data"/></div>';
+
+    }else{
+
+      clipBoardText = buildNormalCard();
     }
+    
 
     return Container(
       decoration: BoxDecoration(

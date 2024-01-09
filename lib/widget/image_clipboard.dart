@@ -153,7 +153,7 @@ class ImageData {
   String? type;
 
   Future<String> base64String() async{
-    if(type == null || type!.isEmpty){
+    if(imgPath != null){
       var dotIndex = imgPath!.indexOf('.');
       type = imgPath!.substring(dotIndex + 1);
     }

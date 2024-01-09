@@ -66,8 +66,6 @@ class OnReadingSection extends StatelessWidget {
     final item = await Navigator.push(
       context, MaterialPageRoute(builder: (context) => AddOnReadingPage(kanji: kanji,)));
 
-    print(item);
-
     if(item is OnReadingItem){
       addItem(item);
     }

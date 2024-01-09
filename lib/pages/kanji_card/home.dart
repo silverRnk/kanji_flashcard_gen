@@ -24,7 +24,30 @@ class _HomePageState extends State<HomePage> {
                 return Wrap(
             spacing: 10,
             children: [
-              ...cards.items.map((e) => KanjiChip(kanji: e.kanji)).toList() 
+              ...cards.items.map((e) => KanjiChip(kanji: e.kanji, onClick: () {
+                showDialog<void>(context: context, builder: (context) {
+                  return Dialog(
+                    child: Container(
+                      height: 300,
+                      width: 300,
+                      padding: EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.all(Radius.circular(20))
+                      ),
+                      child: Column(
+                        children: [
+                          Text('Memonics'),
+                          Text('Stroke'),
+                          Text('On Reading'),
+                          Text('Kun Reading')
+
+                        ],
+                      ),
+                    ),
+                  );
+                },);
+              },)).toList() 
               // List.generate(cards.items.length, (index) => KanjiChip(kanji: cards.items[index].kanji,)) as Widget
             ],);
               }

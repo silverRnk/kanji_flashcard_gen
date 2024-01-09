@@ -2,6 +2,7 @@
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:kanji_flashcard_gen/model/KanjiCard.dart';
 import 'package:kanji_flashcard_gen/state.dart';
 import 'package:kanji_flashcard_gen/widget/clipboardbox.dart';
@@ -29,6 +30,7 @@ class _CreateKanjiPage extends State<CreateKanjiPage> {
   ImageData _strokeImg = ImageData();
   late ScrollController scrollController;
   // late QuillController  quillController;
+  TextEditingController _textEditingController = TextEditingController(text: '');
 
   final GlobalKey _memonicsAndPicKey = GlobalKey();
   final GlobalKey _storeKey = GlobalKey();
@@ -98,6 +100,8 @@ class _CreateKanjiPage extends State<CreateKanjiPage> {
     // quillController = QuillController.basic();
     // print("Init page1");
     super.initState();
+
+    debugPrint('Kanji: ' + _textEditingController.text);
   }
 
   Widget _divider(BuildContext context){
@@ -185,6 +189,7 @@ class _CreateKanjiPage extends State<CreateKanjiPage> {
                           style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                         TextField(
+                          controller: _textEditingController,
                           textAlign: TextAlign.center,
                           onChanged: (value) {
                             _setKanji(value);
@@ -214,10 +219,23 @@ class _CreateKanjiPage extends State<CreateKanjiPage> {
                             data: _kanji + sampleImage,
                             side: FlashCardSide.front,
                             flashCardType: KanjiFlashCardType.memonicAndPic),
-                          ClipBoardBox(
-                            data: _kanji,
-                            side: FlashCardSide.back,
-                            flashCardType: KanjiFlashCardType.memonicAndPic),
+                          FutureBuilder(future: _memonicAndPicImg.base64String(), builder: (context, snapshot) {
+                            String data = snapshot.data?? '';
+
+                            // debugPrint(data);
+                            if(snapshot.hasData){
+                              return ClipBoardBox(
+                                data: snapshot.data ?? 'boo',
+                                side: FlashCardSide.back,
+                                flashCardType: KanjiFlashCardType.memonicAndPic);
+                            }else{
+                              return ClipBoardBox(
+                                data: '',
+                                side: FlashCardSide.back,
+                                flashCardType: KanjiFlashCardType.memonicAndPic);
+                            }
+                          
+                          },)
                           ],
                         ),
                         SizedBox(height: 10,),
